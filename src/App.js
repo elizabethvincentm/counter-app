@@ -1,4 +1,10 @@
 import React, { useReducer } from 'react'
+import { ReactComponent as Add } from './assets/add.svg'
+import { ReactComponent as Sub } from './assets/sub.svg'
+import { ReactComponent as Delete } from './assets/delete.svg'
+import { ReactComponent as Cart } from './assets/cart.svg'
+import { ReactComponent as Reset } from './assets/reset.svg'
+import { ReactComponent as Refresh } from './assets/refresh.svg'
 import './App.css'
 
 const initialState = [
@@ -35,33 +41,77 @@ export default function App() {
   const [items, dispatch] = useReducer(reducer, initialState)
   return (
     <div className="App">
-      <div>
-        <div>Total</div>
-        <div>{items.filter((item) => item.quantity > 0).length}</div>
+      <div className="header">
+        <Cart className="p-10" />
+        <div className="total-items">
+          {items.filter((item) => item.quantity > 0).length}
+        </div>
+        <div className="p-10">Items</div>
       </div>
-      <div>
-        <span onClick={() => dispatch({ type: 'reset' })}>Reset</span>
-      </div>
-      <div>
+      <div className="sub-header">
+        <button className="button" onClick={() => dispatch({ type: 'reset' })}>
+          <Reset />
+        </button>
+
         <button
+          className="button"
           disabled={items.length !== 0}
           onClick={() => dispatch({ type: 'initialize' })}
         >
-          Reload
+          <Refresh />
         </button>
       </div>
       {items.map((item) => (
-        <div className="">
-          {item.quantity}
-          <span onClick={() => dispatch({ type: 'increment', id: item.id })}>
-            +
-          </span>{' '}
-          <span onClick={() => dispatch({ type: 'decrement', id: item.id })}>
-            -
-          </span>
-          <span onClick={() => dispatch({ type: 'remove', id: item.id })}>
-            delete
-          </span>
+        <div className="item-row">
+          <div
+            style={{
+              width: '100px',
+            }}
+          >
+            {item.quantity ? (
+              <span
+                style={{
+                  backgroundColor: 'yellow',
+                  fontWeight: 'bold',
+                  width: '50px',
+                  padding: '10px',
+                }}
+              >
+                {item.quantity}
+              </span>
+            ) : (
+              <span
+                style={{
+                  backgroundColor: 'goldenrod',
+                  fontWeight: 'bold',
+                  width: '50px',
+                  padding: '10px',
+                  borderRadius: '5px',
+                }}
+              >
+                {' '}
+                Zero
+              </span>
+            )}{' '}
+          </div>
+          <button
+            className="button"
+            onClick={() => dispatch({ type: 'increment', id: item.id })}
+          >
+            <Add />
+          </button>{' '}
+          <button
+            className="button"
+            onClick={() => dispatch({ type: 'decrement', id: item.id })}
+          >
+            <Sub />
+          </button>
+          <button
+            className="button"
+            onClick={() => dispatch({ type: 'remove', id: item.id })}
+          >
+            <Delete />
+          </button>
         </div>
       ))}
     </div>
